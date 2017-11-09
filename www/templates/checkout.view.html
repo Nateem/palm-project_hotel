@@ -1,0 +1,122 @@
+<div ng-controller="checkoutController as showCase">
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-default" onClick="history.back()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </button>
+            </div>
+            <h3 class="box-title text-center">
+                <button type="button" class="btn btn-success btn-lg" ui-sref="checkout_add">
+                    <i class="fa fa-plus"></i> Check OUT
+                </button>
+                <!--
+                <button type="button" class="btn bg-navy btn-lg" ui-sref="checkout_auto">
+                    <i class="fa fa-plus"></i> ทำรายการจองอัตโนมัติ
+                </button>
+                -->
+            </h3>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="row-border hover table table-striped table-hover jambo_table bulk_action">
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+    <!-- Modal -->
+    <div class="modal" id="ShowCheckinDetail" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ShowCheckinDetailLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ShowCheckinDetailLabel">รายละเอียด</h4>
+                </div>
+                <div class="modal-body" id="printBodyDetail">
+                    <blockquote>
+                        <p>ลูกค้า : {{FULLNAME}}</p>
+                        <p>วันเข้าพัก : {{E_START | amDateFormat:'ddd , DD/MM/YYYY' }}
+                            <kbd>ถึง</kbd> {{ E_END | amDateFormat:'ddd , DD/MM/YYYY'}}</p>
+                        <p>จำนวน : {{E_BETWEEN}} วัน</p>
+                        <p>เลขที่ใบเสร็จ : {{BILLCODE}} <span style="float: right;">วันที่ {{CREATED | amDateFormat:'DD/MM/YYYY'}}</span></p>
+                        <p>หมายเหตุ : {{NOTE}}</p>
+                    </blockquote>
+                    <hr>
+                    <table width="100%" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>ประภทห้อง</th>
+                                <th>ห้อง</th>
+                                <th>Check IN</th>
+                                <th>Check OUT</th>
+                                <th>ราคา</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="bd in checkout_detailRepeat">
+                                <td>{{$index+1}}</td>
+                                <td>{{bd.NAME_TYPE}}</td>
+                                <td>{{bd.room_data_CODE + ' : ' + bd.ROOM_NAME }}</td>
+                                <td><span ng-bind="{'1':'','0':'X'}[bd.CHK_IN]"></span>{{bd.CHK_IN_DATETIME | amDateFormat:'ddd , DD/MM/YYYY HH:mm น.'}} </td>
+                                <td><span ng-bind="{'1':'','0':'X'}[bd.CHK_OUT]"></span> {{bd.CHK_OUT_DATETIME | amDateFormat:'ddd , DD/MM/YYYY HH:mm น.'}} </td>
+                                <td align="right" class="text-right">{{bd.PRICE | currency: 'THB '}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            
+                            <tr>
+                                <td  style="border-top: 1px outset #666;" align="right" colspan="5" class="text-right">ค่าเตียงเสริม : </td>
+                                <td  style="border-top: 1px outset #666;" align="right" class="text-right">{{PRICE_BEDPLUS | currency: 'THB '}}</td>
+                            </tr>
+                            <tr>
+                                <td align="right" colspan="5" class="text-right">ส่วนลด : </td>
+                                <td align="right" class="text-right">{{DISCOUNT | currency: 'THB '}}</td>
+                            </tr>                            
+                            <tr>
+                                <td align="right" colspan="5" class="text-right">รวม : </td>
+                                <td align="right" class="text-right">{{PRICE_TOTAL | currency: 'THB '}}</td>
+                            </tr>  
+                            <tr>
+                                <th colspan="5" align="right" class="text-right">เงินมัดจำ : </th>
+                                <th align="right" class="text-right">{{DEPOSIT | currency: 'THB '}}</th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" align="right" class="text-right">อื่นๆ(ค่าอาหาร/เครื่องดื่ม)รวม : </th>
+                                <th align="right" class="text-right">{{OTHER_PRICE | currency: 'THB '}}</th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" align="right" class="text-right"><u>รวมเป็นเงินทั้งสิ้น :</u></th>
+                                <th align="right" class="text-right"><u>{{PRICE_SUM_TOTAL | currency: 'THB '}}</u></th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" align="right" class="text-right">ชำระแล้ว : </th>
+                                <th align="right" class="text-right">{{PAY | currency: 'THB '}}</th>
+                            </tr>
+                            <tr ng-if="CASH_CHANGE>0">
+                                <th colspan="5" align="right" class="text-right">เงินทอน : </th>
+                                <th align="right" class="text-right">{{CASH_CHANGE | currency: 'THB '}}</th>
+                            </tr>
+                            <tr ng-if="OWE>=0">
+                                <th colspan="5" align="right" class="text-right">ค้างชำระ : </th>
+                                <th align="right" class="text-right">{{OWE | currency: 'THB '}}</th>
+                            </tr>
+                           
+                        </tfoot>
+                    </table>
+                    <i ng-show="false" style="position: fixed;bottom: 5px;right: 5px;font-size: 16px;">โดย {{globals.currentDATA.FULLNAME}} เมื่อ {{CURDATE | amDateFormat:'DD/MM/YYYY HH:mm:ss'}}</i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" ng-click="PrintElem('printBodyDetail')">
+                        <i class="fa fa-print"></i> Print</button>
+                    <button type="button" class="btn btn-success" ng-click="PrintElem('printBodyDetail',true)">
+                        <i class="fa fa-print"></i> ใบเสร็จกำกับภาษี</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!--<div class="pull-left" ng-include="'./include/info.calculator.html'"></div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,168 @@
+<style>
+.info-box:hover {
+    cursor: pointer;
+    box-shadow: 1px 5px 10px #333;
+    border: -2px solid #ddd;
+}
+
+.panel:hover {
+    border: 1px solid #9E9E9E;
+}
+
+.linkClick:hover {
+    cursor: pointer;
+    text-shadow: 1px 2px 2px #333;
+}
+</style>
+<div ng-controller="not_available_addController">
+    <div class="box box-danger">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-default" onClick="history.back()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </button>
+            </div>
+            <h3 class="box-title">
+                <span ng-repeat="sR in statusRepeat" style="font-size: 9px;">   
+                    <i class="fa fa-square fa-2x" style="color: {{sR.COLOR_CODE}};"></i> {{sR.STATUS}}
+                </span>
+            </h3>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <form name="formDateRang" ng-submit="onChangeDateRang()" class="top_scroll">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <div class="alert alert-info text-center" style="height: 30px; padding: 4px;cursor: pointer;" role="alert" date-range-picker ng-model="form.DATERANG" options="rangOptions" >
+                            <i class="fa fa-calendar"></i> {{form.DATERANG.startDate | amDateFormat:'YYYY/MM/DD , ddd'}} <kbd>ถึง</kbd> {{form.DATERANG.endDate | amDateFormat:'YYYY/MM/DD , ddd'}}
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <button ng-disabled="NUM_BADGE<1" style="height: 30px;padding: 4px;" type="button" class="btn btn-danger btn-block" ng-click="ShowTempOrders()">
+                            <span class="badge" ng-bind="NUM_BADGE">0</span> รายการ/ต่อไป
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="containner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="well">
+                            <div class="row" ng-repeat="rm_type in DataRoomRepeat" ng-if="rm_type[0].CODE">
+                                <fieldset>
+                                    <legend>{{DataRoomHeadRepeat[$index].NAME_TYPE}} Price : {{DataRoomHeadRepeat[$index].PRICE | currency:"THB "}}
+                                        <small>รายละเอียด : ขนาดเตียง {{DataRoomHeadRepeat[$index].BED_SIZE}} รองรับ {{DataRoomHeadRepeat[$index].SUPPORT}} ท่าน</small></legend>                                    
+                                    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6" ng-repeat="rm in rm_type" ng-click="INSERT_TEMP(rm.CODE,rm.ROOM_STATUS_CODE)" style="padding: 4px;">
+                                        <div class="room_item" ng-class="{'1':'bg-green','2':'bg-blue','3':'bg-orange','4':'bg-red'}[rm.ROOM_STATUS_CODE]" style="max-height: 30px;padding: 4px;">
+                                            <p><code style="font-size: 10px;">{{rm.CODE}}</code></p>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+    <!-- Print -->
+    <div id="printBody" ng-show="false">
+        <blockquote>
+            <p>วันที่ : {{CURDATE | amDateFormat:'DD/MM/YYYY'}}</p>            
+            <p>วันปรับปรุง :{{form.DATERANG.startDate | amDateFormat:'YYYY/MM/DD , ddd'}}
+                <kbd>ถึง</kbd> {{form.DATERANG.endDate | amDateFormat:'YYYY/MM/DD , ddd'}}</p>
+            <p>เลขที่ใบเสร็จ : {{BILLCODE}}</p>
+            <p>หมายเหตุ : {{modal.NOTE}}</p>
+        </blockquote>
+        <hr>
+        <table width="100%" border="0" cellspacing="0" cellpadding="8" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ลำดับ</th>
+                    <th>ประเภท</th>
+                    <th>รหัสห้อง</th>
+                    <th>จำนวน/วัน</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="tmp in tempDataRepeat">
+                    <td>{{$index+1}}</td>
+                    <td>{{tmp.NAME_TYPE}}</td>
+                    <td>{{tmp.room_data_CODE+ ' : ' + tmp.NAME}}</td>
+                    <td align="center">{{tmp.E_BETWEEN}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <i style="position: fixed;bottom: 5px;right: 5px;font-size: 16px;">โดย {{globals.currentDATA.FULLNAME}} เมื่อ {{CURDATE | amDateFormat:'DD/MM/YYYY HH:mm:ss'}}</i>
+    </div>
+    <!-- Modal -->
+    <div class="modal" id="ShowTempOrders" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ShowTempOrdersLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ShowTempOrdersLabel">รายละเอียด</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="formModal" method="post" ng-submit="FORM_MODAL_SUBMIT(formModal)">
+                        <blockquote>
+                            <p>วันที่รายการ : {{CURDATE | amDateFormat:'DD/MM/YYYY'}}</p>
+                            <p>เลขที่ใบเสร็จ : {{BILLCODE}}</p>
+                            <p>วันปรับปรุง: {{form.DATERANG.startDate | amDateFormat:'YYYY/MM/DD , ddd'}}
+                                <kbd>ถึง</kbd> {{form.DATERANG.endDate | amDateFormat:'YYYY/MM/DD , ddd'}}</p>
+                        </blockquote>
+                        <table class="table table-striped table-hover">
+                            <caption>
+                                <h3>รายการ</h3>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th>ลำดับ</th>
+                                    <th>ประเภท</th>
+                                    <th>รหัสห้อง</th>
+                                    <th>จำนวน/วัน</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+                            <tbody style="height: 300px;overflow:auto;">
+                                <tr ng-repeat="tmp in tempDataRepeat">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{tmp.NAME_TYPE}}</td>
+                                    <td>{{tmp.room_data_CODE+ ' : ' + tmp.NAME}}</td>
+                                    <td>{{tmp.E_BETWEEN}}</td>
+                                    <td><span class="linkClick" ng-click="DELETE_TEMP(tmp.ID)">
+                                    <i class="fa fa-2x fa-times text-danger" aria-hidden="true"></i>
+                                </span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                หมายเหตุ
+                                <textarea style="background-color: #E0F7FA;" ng-model="modal.NOTE" class="form-control bg-info"></textarea>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row ">
+                            <div class="col-xs-6">
+                                <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="PrintElemOne('printBody')">
+                        <i class="fa fa-print"></i> Print</button>
+                            </div>
+                            <div class="col-xs-6">
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">
+                                    <i class="fa fa-save"></i> บันทึก
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,178 @@
+<style>
+.info-box,
+.small-box {
+    cursor: pointer;
+}
+
+.small-box:hover,
+.info-box:hover {
+    box-shadow: 3px 5px 3px #666;
+}
+</style>
+<div ng-controller="homeController">
+    <div class="row">
+        <div class="col-sm-4">
+            <!-- small box -->
+            <div class="small-box bg-primary" ui-sref="checkin">
+                <div class="inner">
+                    <p>เข้าพัก</p>
+                    <h3>Check In</h3>
+                    <p>ការកក់</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-sign-in"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <!-- small box -->
+            <div class="small-box bg-green" ui-sref="checkout">
+                <div class="inner">
+                    <p>ออก</p>
+                    <h3>Check Out</h3>
+                    <p>បន្ទប់ទាំងអស់</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-sign-out"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <p>Clock</p>
+                    <h3>{{THdateConvert}}</h3>
+                    <p>{{ENdateConvert | date:'medium'}}</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <!-- small box -->
+            <div class="small-box bg-yellow" ui-sref="booking">
+                <div class="inner">
+                    <p>การจอง</p>
+                    <h3>Booking</h3>
+                    <p>ការកក់</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-calendar-check-o"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <!-- small box -->
+            <div class="small-box bg-red" ui-sref="not_available">
+                <div class="inner">
+                    <p>ไม่พร้อมใช้งาน</p>
+                    <h3>Not available</h3>
+                    <p>មិនអាច</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-wrench"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <!-- small box -->
+            <div class="small-box bg-purple" ui-sref="summary_total">
+                <div class="inner">
+                    <p>สรุปยอด</p>
+                    <h3>Summary</h3>
+                    <p>សេចក្តីសង្ខេប</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-line-chart"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <!-- small box -->
+            <div class="small-box bg-maroon" ui-sref="manage">
+                <div class="inner">
+                    <p>จัดการทั้งหมด</p>
+                    <h3>Manage</h3>
+                    <p>គ្រប់គ្រង</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-cog "></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="info-box bg-green">
+                <span class="info-box-icon"><i class="fa fa-bed"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">ห้องว่าง</span>
+                    <span class="info-box-number">{{room_available}}</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:{{room_available_percent}}%;"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{room_available_percent | number:1}}%
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->            
+        </div>
+        <div class="col-sm-2">
+            <div class="info-box bg-yellow">
+                <span class="info-box-icon"><i class="fa fa-bed"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">จอง</span>
+                    <span class="info-box-number">{{room_booking}}</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:{{room_booking_percent}}%;"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{room_booking_percent | number:1}}%
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->            
+        </div>
+        <div class="col-sm-2">
+            <div class="info-box bg-blue">
+                <span class="info-box-icon"><i class="fa fa-bed"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">มีผู้เข้าพัก</span>
+                    <span class="info-box-number">{{room_checkin}}</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:{{room_checkin_percent}}%;"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{room_checkin_percent | number:1}}%
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->            
+        </div>       
+        <div class="col-sm-2">
+            <div class="info-box bg-red">
+                <span class="info-box-icon"><i class="fa fa-bed"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">ไม่พร้อมใช้งาน</span>
+                    <span class="info-box-number">{{room_repair}}</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:{{room_repair_percent}}%;"></div>
+                    </div>
+                    <span class="progress-description">
+                    {{room_repair_percent | number:1}}%
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->            
+        </div>           
+    </div>
+</div>

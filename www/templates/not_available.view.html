@@ -1,0 +1,74 @@
+<div ng-controller="not_availableController as showCase">
+    <div class="box box-danger">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-default" onClick="history.back()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </button>
+            </div>
+            <h3 class="box-title text-center">
+                <button type="button" class="btn btn-danger btn-lg" ui-sref="not_available_add">
+                    <i class="fa fa-plus"></i> Add Not available
+                </button>
+                <!--
+                <button type="button" class="btn bg-navy btn-lg" ui-sref="not_available_auto">
+                    <i class="fa fa-plus"></i> ทำรายการจองอัตโนมัติ
+                </button>
+                -->
+            </h3>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="row-border hover table table-striped table-hover jambo_table bulk_action">
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+    <!-- Modal -->
+    <div class="modal" id="ShowNotADetail" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ShowNotADetailLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ShowNotADetailLabel">รายละเอียด</h4>
+                </div>
+                <div class="modal-body" id="printBodyDetail">
+                    <blockquote >                        
+                        <p>วันปรับปรุง : {{E_START | amDateFormat:'YYYY/MM/DD , ddd' }}
+                            <kbd>ถึง</kbd> {{ E_END | amDateFormat:'YYYY/MM/DD , ddd'}}</p>
+                        <p>จำนวน : {{E_BETWEEN}} วัน</p>
+                        <p>เลขที่ใบเสร็จ : {{BILLCODE}}</p>    
+                        
+                    </blockquote>
+                    <hr>
+                    <table width="100%"  class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>ประภทห้อง</th>
+                                <th>ห้อง</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="bd in not_available_detailRepeat">
+                                <td>{{$index+1}}</td>
+                                <td>{{bd.NAME_TYPE}}</td>
+                                <td>{{bd.room_data_CODE + ' : ' + bd.ROOM_NAME }}</td>
+                            </tr>
+                        </tbody>                        
+                    </table>
+                    <hr>
+                    <p>หมายเหตุ : {{NOTE}}</p>
+                    <i ng-show="false" style="position: fixed;bottom: 5px;right: 5px;font-size: 16px;">โดย {{globals.currentDATA.FULLNAME}} เมื่อ {{CURDATE | amDateFormat:'DD/MM/YYYY HH:mm:ss'}}</i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" ng-click="PrintElemOne('printBodyDetail')">
+                        <i class="fa fa-print"></i> Print</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

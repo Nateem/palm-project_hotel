@@ -1,0 +1,166 @@
+<style>
+.info-box,
+.small-box {
+    cursor: pointer;
+}
+
+.small-box:hover,
+.info-box:hover {
+    box-shadow: 3px 5px 3px #666;
+}
+
+table.table thead tr th {
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'Quark-Bold', Times, serif;
+}
+</style>
+<div ng-controller="summary_totalController">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-default" onClick="history.back()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </button>
+            </div>
+            <div class="box-title">
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label for="headINP">หัวข้อ :</label>
+                        <input type="text" style="height: 50px;font-size: 18px;" id="headINP" ng-model="INP_TITLE" class="form-control" placeholder="กรอกหัวข้อที่ต้องการแสดงในรายงาน">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>ระหว่าง :</label>
+                        <input type="date" style="height: 50px;font-size: 18px;" ng-model="form.E_START" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                        <label>ถึง :</label>
+                        <input type="date" style="height: 50px;font-size: 18px;" ng-model="form.E_END" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>ประเภทรายการ :</label>
+                        <br>
+                        <label ng-repeat="role in roles_orders_type">
+                            <input style="height: 20px;width: 20px;" type="checkbox" checklist-model="orders_type.roles" checklist-value="role.id"> {{role.text}}
+                        </label>
+                    </div>
+                    <!--
+                    <div class="col-sm-6">
+                        <p>{{orders_type.roles}}</p>
+                    </div>
+                    <div class="col-xs-12">
+                        <hr>
+                        <div class="alert alert-info text-center" role="alert">
+                            ตั้งแต่ {{form.E_START | amDateFormat:'ddd , DD/MM/YYYY'}} ถึง {{form.E_END | amDateFormat:'ddd , DD/MM/YYYY'}}
+                        </div>
+                    </div>
+                    -->
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button type="button" class="btn btn-danger" ng-click="ShowModal()">
+                            <i class="fa fa-check"></i> Enter
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal" id="ModalPrint" tabindex="-1" role="dialog" aria-labelledby="ModalPrintLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="ModalPrintLabel">รายการ</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="panel panel-info">
+                                <div class="panel-body" id="modalBodyId" style="max-width: 900px;max-height: 500px;overflow: auto;">
+                                    <blockquote>
+                                        <h2 ng-if="INP_TITLE">หัวข้อ : {{INP_TITLE}}</h2>
+                                        <p>ระหว่าง {{form.E_START | amDateFormat:'ddd , DD/MM/YYYY'}} ถึง {{form.E_END | amDateFormat:'ddd , DD/MM/YYYY'}}</p>
+                                    </blockquote>
+                                    <table border="1" cellpadding="8" cellspacing="0" class="table table-bordered table-striped table-hover" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>วันทำรายการ</th>
+                                                <th>เลขที่ใบเสร็จ</th>
+                                                <th>ประเภทรายการ</th>
+                                                <th>ระหว่าง</th>
+                                                <th>ลูกค้า</th>
+                                                <th>เตียงเสริม</th>
+                                                <th>ส่วนลด</th>
+                                                <th>จำนวน/วัน</th>
+                                                <th>รายการ</th>
+                                                <th>อื่นๆ</th>
+                                                <th>รวม</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="sm in dataSumRepeat">
+                                                <td class="left_bottom">{{sm.CREATED | amDateFormat:'DD/MM/YYYY , ddd'}}</td>
+                                                <td class="left_bottom">{{sm.BILLCODE}}</td>
+                                                <td>{{sm.orders_type_NAME}}</td>
+                                                <td class="left_bottom">{{sm.E_START | amDateFormat:'ddd , DD/MM/YYYY'}} - {{sm.E_END | amDateFormat:'ddd , DD/MM/YYYY'}}</td>
+                                                <td class="left_bottom">{{sm.CUSTOMER_NAME}}</td>
+                                                <td class="left_bottom" align="right">{{sm.PRICE_BEDPLUS | currency:''}}</td>
+                                                <td align="right">{{sm.DISCOUNT | currency:''}}</td>
+                                                <td class="left_bottom" align="center">{{sm.E_BETWEEN}}</td>
+                                                <td class="left_bottom">
+                                                    <table width="100%" class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ห้อง</th>
+                                                                <th>ราคา</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="dt in sm.events_detail">
+                                                                <td>{{dt.room_data_CODE}}</td>
+                                                                <td align="right">{{dt.PRICE | currency:''}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td class="left_bottom" align="right">{{sm.OTHER_PRICE | currency:''}}</td>
+                                                <td class="left_right_bottom" align="right">{{sm.PRICE_TOTAL | currency:''}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="5" align="center"><u>รวม : </u></th>
+                                                <th align="right"><u>{{getTotal().PRICE_BEDPLUS | currency:''}}</u></th>
+                                                <th align="right"><u>{{getTotal().DISCOUNT | currency:''}}</u></th>
+                                                <th align="center"><u>{{getTotal().E_BETWEEN}}</u></th>
+                                                <th align="right"><u>{{getTotal().PRICE | currency:''}}</u></th>
+                                                <th align="right"><u>{{getTotal().OTHER_PRICE | currency:''}}</u></th>
+                                                <th align="right"><u>{{getTotal().SumTotal | currency:''}}</u></th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="10" align="center"><u>รวมทั้งสิ้น : </u></th>
+                                                <th align="right"><u>{{getTotal().SumTotal | currency:''}}</u></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" ng-click="PrintElemOne('modalBodyId')">
+                                <i class="fa fa-print"></i> Print
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

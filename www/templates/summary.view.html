@@ -1,0 +1,57 @@
+<style>
+.info-box,
+.small-box {
+    cursor: pointer;
+}
+
+.small-box:hover,
+.info-box:hover {
+    box-shadow: 3px 5px 3px #666;
+}
+</style>
+<div ng-controller="summaryController">
+    <div class="box box-default">
+        <div class="box-header with-border">
+                <div class="box-tools pull-right">
+                <button type="button" class="btn btn-default" onClick="history.back()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </button>
+            </div>
+            <div class="box-title">
+                
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <!-- small box -->
+                    <div class="small-box bg-primary" ui-sref="summary_room_type">
+                        <div class="inner">    
+                            <p>จัดการประเภทห้องพัก</p>  
+                            <h3>Manage Room Type</h3>                     
+                            <p>គ្រប់គ្រងបន្ទប់ប្រភេទ</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-bed"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <!-- small box -->
+                    <div class="small-box bg-teal" ui-sref="summary_room_data">
+                        <div class="inner">    
+                            <p>จัดการข้อมูลห้องพัก</p>  
+                            <h3>Manage Room Data</h3>                     
+                            <p>គ្រប់គ្រងបន្ទប់ទិន្នន័យ</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-bath"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

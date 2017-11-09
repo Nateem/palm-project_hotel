@@ -1,0 +1,33 @@
+<!-- Small boxes (Stat box) -->
+<div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
+    <div class="box box-danger" ng-controller="loginController">
+        <div class="box-header">
+            <h4>
+                <i class="fa fa-key"></i>
+                กรุณา Login เข้าสู่ระบบ
+            </h4>
+        </div>
+        <div class="box-body">
+            <form name="form" ng-submit="login()" role="form">
+                <div class="form-group">
+                    <label for="username">Username <span class="text-red">*</span></label>
+                    <input type="text" name="username" id="username" class="form-control input-lg" ng-model="username" required autofocus/>
+                    <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block text-red">*Username is required</span>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password <span class="text-red">*</span></label>
+                    <input type="password" name="password" id="password" class="form-control input-lg" ng-model="password" required />
+                    <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block text-red">*Password is required</span>
+                </div>
+                <div class="form-actions">
+                    <div class="pull-right">
+                        <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn btn-lg btn-primary">
+                            <i class="fa fa-sign-in fa-lg"  ng-if="!dataLoading"></i>
+                            <i class="fa fa-spinner fa-pulse fa-fw" ng-if="dataLoading"></i> Login
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

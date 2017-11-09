@@ -1,0 +1,81 @@
+<div ng-controller="manage_customerController as showCase">
+    <div class="row">
+        <div class="col-md-3 col-xs-12">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h2> จัดการ</h2>
+                </div>
+                <div class="box-body">
+                    <h2>{{detail}}</h2>
+                    <form name="form_customer">
+                        <input type="hidden" name="inpID" ng-model="customer.ID">                        
+                        <div class="form-group">
+                            <label>รหัสประจำตัว</label>
+                            <input type="text" name="inpID13" id="inpID13" ng-model="customer.ID13" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>คำนำหน้า</label>
+                            <select name="inpPREFIX_ID" id="inpPREFIX_ID" ng-model="customer.PREFIX_ID" class="form-control" required>
+                                <option value="">-เลือกคำนำหน้า-</option>
+                                <option value="{{pre.PREFIX_ID}}" ng-repeat="pre in prefixRepeat">{{pre.PREFIX}}</option>
+                            </select>                            
+                        </div>
+                        <div class="form-group">
+                            <label>ชื่อ</label>
+                            <input type="text" name="inpFNAME" id="inpFNAME" ng-model="customer.FNAME" class="form-control" required>
+                        </div>  
+                        <div class="form-group">
+                            <label>สกุล</label>
+                            <input type="text" name="inpLNAME" id="inpLNAME" ng-model="customer.LNAME" class="form-control" required>
+                        </div>   
+                        <div class="form-group">
+                            <label>ที่อยู่</label>
+                            <textarea name="inpADDRESS" id="inpADDRESS" ng-model="customer.ADDRESS" class="form-control"></textarea>                            
+                        </div>  
+                        <div class="form-group">
+                            <label>เบอร์โทรศัพท์</label>
+                            <input type="tel" name="inpPHONE" id="inpPHONE" ng-model="customer.PHONE" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label>อีเมลล์</label>
+                            <input type="email" name="inpEMAIL" id="inpEMAIL" ng-model="customer.EMAIL" class="form-control" >
+                        </div>                      
+                        <hr>
+                        <div class="btn-group pull-right" role="group">
+                            <button type="submit" ng-click="formSave(form_customer,'INSERT')" class="btn btn-primary" ng-disabled="form_customer.$invalid">
+                                <i class="fa fa-save"></i> บันทึกใหม่
+                            </button>
+                            <button type="submit" ng-click="formSave(form_customer,'UPDATE')" class="btn btn-warning" ng-disabled="!customer.ID || form_customer.$invalid">
+                                <i class="fa fa-pencil"></i> บันทึกแก้ไข
+                            </button>
+                            <button type="reset" class="btn btn-default" ng-click="resetForm(form_customer)" ng-disabled="form_customer.$pristine">
+                                <i class="fa fa-refresh"></i> รีเซต
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h2> รายการบันทึก </h2>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-default" onClick="history.back()">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                        </button>
+                    </div>
+                    <span class="pull-right">
+                        <button type="button" ng-click="showCase.reloadData()" class="btn btn-default">
+                            <i class="fa fa-refresh"></i> รีโหลด
+                        </button>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="box-body">
+                    <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="row-border hover table table-striped jambo_table bulk_action"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

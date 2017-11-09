@@ -1,0 +1,66 @@
+<div ng-controller="manage_room_typeController as showCase">
+    <div class="row">
+        <div class="col-md-3 col-xs-12">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h2> จัดการ</h2>
+                </div>
+                <div class="box-body">
+                    <h2>{{detail}}</h2>
+                    <form name="form_room_type">
+                        <input type="hidden" name="inpID" ng-model="room_type.ID">                        
+                        <div class="form-group">
+                            <label>ชื่อปรเภท</label>
+                            <input type="text" name="inpNAME_TYPE" id="inpNAME_TYPE" ng-model="room_type.NAME_TYPE" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>รองรับ/ท่าน</label>
+                            <input type="number" step="any" min="0" name="inpSUPPORT" id="inpSUPPORT" ng-model="room_type.SUPPORT" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ขนาดเตียง</label>
+                            <input type="text" name="inpBED_SIZE" id="inpBED_SIZE" ng-model="room_type.BED_SIZE" class="form-control" required>
+                        </div>   
+                        <div class="form-group">
+                            <label>ราคา</label>
+                            <input type="number" step="any" min="0" name="inpPRICE" id="inpPRICE" ng-model="room_type.PRICE" class="form-control" required>
+                        </div>                       
+                        <hr>
+                        <div class="btn-group pull-right" role="group">
+                            <button type="submit" ng-click="formSave(form_room_type,'INSERT')" class="btn btn-primary" ng-disabled="form_room_type.$invalid">
+                                <i class="fa fa-save"></i> บันทึกใหม่
+                            </button>
+                            <button type="submit" ng-click="formSave(form_room_type,'UPDATE')" class="btn btn-warning" ng-disabled="!room_type.ID || form_room_type.$invalid">
+                                <i class="fa fa-pencil"></i> บันทึกแก้ไข
+                            </button>
+                            <button type="reset" class="btn btn-default" ng-click="resetForm(form_room_type)" ng-disabled="form_room_type.$pristine">
+                                <i class="fa fa-refresh"></i> รีเซต
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h2> รายการบันทึก </h2>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-default" onClick="history.back()">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                        </button>
+                    </div>
+                    <span class="pull-right">
+                        <button type="button" ng-click="showCase.reloadData()" class="btn btn-default">
+                            <i class="fa fa-refresh"></i> รีโหลด
+                        </button>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="box-body">
+                    <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="row-border hover table table-striped jambo_table bulk_action"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,313 @@
+<style>
+.info-box:hover {
+    cursor: pointer;
+    box-shadow: 1px 5px 10px #333;
+    border: -2px solid #ddd;
+}
+
+.panel:hover {
+    border: 1px solid #9E9E9E;
+}
+
+.linkClick:hover {
+    cursor: pointer;
+    text-shadow: 1px 2px 2px #333;
+}
+</style>
+<div ng-controller="booking_addController">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-default" onClick="history.back()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </button>
+            </div>
+            <h3 class="box-title">
+                <span ng-repeat="sR in statusRepeat" style="font-size: 9px;">   
+                    <i class="fa fa-square fa-2x" style="color: {{sR.COLOR_CODE}};"></i> {{sR.STATUS}}
+                </span>
+            </h3>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <form name="formDateRang" ng-submit="onChangeDateRang()" class="top_scroll">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <div class="alert alert-info text-center" style="height: 30px; padding: 4px;cursor: pointer;" role="alert" date-range-picker ng-model="form.DATERANG" options="rangOptions" style="cursor: pointer;">
+                            <i class="fa fa-calendar"></i> {{form.DATERANG.startDate | amDateFormat:'ddd , DD/MM/YYYY'}} <kbd>ถึง</kbd> {{form.DATERANG.endDate | amDateFormat:'ddd , DD/MM/YYYY'}}
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <button ng-disabled="NUM_BADGE<1" style="height: 30px;" type="button" class="btn btn-warning btn-block" ng-click="ShowTempOrders()">
+                            <span class="badge" ng-bind="NUM_BADGE">0</span> รายการ/ต่อไป
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="containner" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="well" >
+                            <div class="row" ng-repeat="rm_type in DataRoomRepeat" ng-if="rm_type[0].CODE">
+                                <fieldset>
+                                    <legend>{{DataRoomHeadRepeat[$index].NAME_TYPE}} Price : {{DataRoomHeadRepeat[$index].PRICE | currency:"THB "}}
+                                        <small>รายละเอียด : ขนาดเตียง {{DataRoomHeadRepeat[$index].BED_SIZE}} รองรับ {{DataRoomHeadRepeat[$index].SUPPORT}} ท่าน</small></legend>                                    
+                                    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6" ng-repeat="rm in rm_type" ng-click="INSERT_TEMP(rm.CODE,rm.ROOM_STATUS_CODE)" style="padding: 4px;">
+                                        <div class="room_item" ng-class="{'1':'bg-green','2':'bg-blue','3':'bg-orange','4':'bg-red'}[rm.ROOM_STATUS_CODE]" style="max-height:30px; padding: 5px;">
+                                            <p><code style="font-size: 10px;">{{rm.CODE}}</code></p>
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+    <!-- Print -->
+    <div id="printBody" ng-show="false">
+        <blockquote>
+            <p>ผู้จอง : {{ modal.FNAME + ' ' + modal.LNAME}}</p>
+            <p>วันจอง :{{form.DATERANG.startDate | amDateFormat:'ddd , DD/MM/YYYY'}}
+                <kbd>ถึง</kbd> {{form.DATERANG.endDate | amDateFormat:'ddd , DD/MM/YYYY'}}</p>
+            <p>เลขที่ใบจอง : {{BILLCODE}} <span style="float: right;">วันที่ {{CURDATE | amDateFormat:'DD/MM/YYYY'}}</span></p>
+            <p>หมายเหตุ : {{modal.NOTE}}</p>
+        </blockquote>
+        <hr>
+        <table width="100%" border="0" cellspacing="0" cellpadding="8" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ลำดับ</th>
+                    <th>ประเภท</th>
+                    <th>รหัสห้อง</th>
+                    <th>จำนวน/วัน</th>
+                    <th>ราคา</th>
+                    <th>รวม</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="tmp in tempDataRepeat">
+                    <td>{{$index+1}}</td>
+                    <td>{{tmp.NAME_TYPE}}</td>
+                    <td>{{tmp.room_data_CODE+ ' : ' + tmp.NAME}}</td>
+                    <td align="center">{{tmp.E_BETWEEN}}</td>
+                    <td align="right">{{tmp.PRICE_SOME | currency:"THB "}}</td>
+                    <td align="right">{{tmp.PRICE | currency:"THB "}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                
+                <tr>
+                    <td style="border-top: 1px outset #666;" colspan="5" align="right">ราคาเตียงเสริม :</td>
+                    <td style="border-top: 1px outset #666;" align="right">{{modal.PRICE_BEDPLUS | currency : 'THB '}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" align="right">ส่วนลด :</td>
+                    <td align="right">{{modal.DISCOUNT | currency: 'THB '}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" align="right">เงินมัดจำ :</td>
+                    <td align="right">{{modal.deposit | currency : 'THB '}}</td>
+                </tr>
+               <tr>
+                    <td  colspan="5" align="right">รวม :</td>
+                    <td  align="right">{{PRICE_TOTAL | currency : 'THB '}}</td>
+                </tr>
+                <tr>
+                    <th colspan="5" align="right"><u>รวมทั้งสิ้น :</u></th>
+                    <th align="right"><u>{{PRICE_SUM_TOTAL | currency : 'THB '}}</u></th>
+                </tr>
+                <tr>
+                    <th colspan="5" align="right">ชำระแล้ว :</th>
+                    <th align="right">{{modal.PAY | currency : 'THB '}}</th>
+                </tr>
+                <tr ng-if="modal.OWE>=0">
+                    <th colspan="5" align="right">ค้างชำระ :</th>
+                    <th align="right">{{modal.OWE | currency : 'THB '}}</th>
+                </tr>
+                <tr ng-if="modal.CASH_CHANGE>0">
+                    <th colspan="5" align="right">เงินทอน :</th>
+                    <th align="right">{{modal.CASH_CHANGE | currency : 'THB '}}</th>
+                </tr>
+                 
+            </tfoot>
+        </table>
+        <i style="position: fixed;bottom: 5px;right: 5px;font-size: 16px;">โดย {{globals.currentDATA.FULLNAME}} เมื่อ {{CURDATE | amDateFormat:'DD/MM/YYYY HH:mm:ss'}}</i>
+    </div>
+    <!-- Modal -->
+    <div class="modal" id="ShowTempOrders" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ShowTempOrdersLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ShowTempOrdersLabel">รายละเอียด</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="formModal" id="printBodyDetail" method="post" ng-submit="FORM_MODAL_SUBMIT(formModal)">
+                        <blockquote>                           
+                            <p>เลขที่ใบเสร็จ : {{BILLCODE}} <span style="float: right;">วันที่ {{CURDATE | amDateFormat:'DD/MM/YYYY'}}</span></p>
+                            <p>วันเข้าพัก : {{form.DATERANG.startDate | amDateFormat:'ddd , DD/MM/YYYY'}}
+                                <kbd>ถึง</kbd> {{form.DATERANG.endDate | amDateFormat:'ddd , DD/MM/YYYY'}}</p>
+                        </blockquote>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                รหัส ปชช.13 หลัก ลูกค้า
+                                <div class="input-group">
+                                    <input type="text" ng-model="modal.ID13" class="input-lg form-control" onclick="this.select()" id="inpID13">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-info btn-lg" ng-click="check_customer(modal.ID13)">
+                                            <i class="fa fa-check-circle-o"></i> ตรวจสอบ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                คำนำหน้า
+                                <select ng-model="modal.PREFIX_ID" class="input-lg form-control" required>
+                                    <option value="">เลือกคำนำหน้า</option>
+                                    <option value="{{pf.PREFIX_ID}}" ng-repeat="pf in prefixRepeat">{{pf.PREFIX}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4">ชื่อ
+                                <input type="text" id="inpFNAME" ng-model="modal.FNAME" class="input-lg form-control" required>
+                            </div>
+                            <div class="col-xs-4">สกุล
+                                <input type="text" ng-model="modal.LNAME" class="input-lg form-control" required>
+                            </div>
+                            <div class="col-xs-6">
+                                <label for="ADDRESS">ที่อยู่</label>
+                                <textarea id="ADDRESS" ng-model="modal.ADDRESS" class="input-lg form-control"></textarea>
+                            </div>
+                            <div class="col-xs-6">
+                                <label for="PHONE">เบอร์โทรศัพท์</label>
+                                <input type="text" id="PHONE" ng-model="modal.PHONE" class="input-lg form-control" required>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover">
+                            <caption>
+                                <h3>รายการ</h3>
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th>ลำดับ</th>
+                                    <th>ประเภท</th>
+                                    <th>รหัสห้อง</th>
+                                    <th>จำนวน/วัน</th>
+                                    <th>ราคา</th>
+                                    <th>รวม</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+                            <tbody style="height: 300px;overflow:auto;">
+                                <tr ng-repeat="tmp in tempDataRepeat">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{tmp.NAME_TYPE}}</td>
+                                    <td>{{tmp.room_data_CODE+ ' : ' + tmp.NAME}}</td>
+                                    <td>{{tmp.E_BETWEEN}}</td>
+                                    <td>{{tmp.PRICE_SOME | currency:"THB "}}</td>
+                                    <td>{{tmp.PRICE | currency:"THB "}}</td>
+                                    <td><span class="linkClick" ng-click="DELETE_TEMP(tmp.ID)">
+                                    <i class="fa fa-2x fa-times text-danger" aria-hidden="true"></i>
+                                </span></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5" class="text-right">รวมรายการ :</th>
+                                    <th colspan="2" class="text-right">{{PRICE_TOTAL | currency:"THB "}}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        ค่าเตียงเสริม/THB
+                                        <input type="number" ng-change="ngChangeNumber();" style="background-color: #FFF3E0;" class="input-lg form-control text-right bg-warning" ng-model="modal.PRICE_BEDPLUS" onclick="this.select()">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        หมายเหตุ
+                                        <textarea style="background-color: #E0F7FA;" ng-model="modal.NOTE" class="form-control bg-info"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        ส่วนลด/THB
+                                        <input type="number" ng-change="ngChangeNumber();" class="input-lg text-right bg-warning form-control" style="background-color: #FCE4EC;" ng-model="modal.DISCOUNT" onclick="this.select()">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        เงินมัดจำ/THB
+                                        <input type="number" ng-change="ngChangeNumber();" style="background-color: #FFEBEE;" class="input-lg text-right bg-warning form-control" ng-model="modal.deposit" onclick="this.select()">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 bg-info">
+                                <table width="100%">
+                                    <tr height="35px">
+                                        <td>ค่าเตียงเสริม :</td>
+                                        <th class="text-right">{{modal.PRICE_BEDPLUS | currency : 'THB '}}</th>
+                                    </tr>
+                                    <tr height="35px">
+                                        <td>ส่วนลด : </td>
+                                        <th class="text-right">{{modal.DISCOUNT | currency : 'THB '}}</th>
+                                    </tr>         
+                                    <tr height="35px">
+                                        <td>เงินมัดจำ :</td>
+                                        <th class="text-right">{{modal.deposit | currency : 'THB '}}</th>
+                                    </tr>                           
+                                    <tr height="35px">
+                                        <th>รวมทั้งสิ้น :</th>
+                                        <th class="text-right"><u>{{PRICE_SUM_TOTAL | currency : 'THB '}}</u></th>
+                                    </tr>
+                                    
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">                            
+                            <div class="col-xs-6">
+                                จ่าย
+                                <input type="number" style="background-color: #B9F6CA;" ng-change="ngChangeNumber();" class="form-control input-lg bg-warning text-right" ng-model="modal.PAY" onclick="this.select()" id="inpPAY">
+                            </div>
+                            <div class="col-xs-6">
+                                ค้างชำระ
+                                <input type="number" style="background-color: #FFEBEE;" class="form-control input-lg bg-warning text-right" ng-model="modal.OWE" onclick="this.select()" readonly>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-lg btn-danger btn-block" ng-click="PRINT_BILL()">
+                                    <i class="fa fa-print"></i> พิมพ์ใบจอง
+                                </button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-success btn-lg btn-block" ng-click="PrintElem('printBody',true)">
+                        <i class="fa fa-print"></i> ใบเสร็จกำกับภาษี</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">
+                                    <i class="fa fa-save"></i> บันทึก
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!--<div class="pull-left" ng-include="'./include/info.calculator.html'"></div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

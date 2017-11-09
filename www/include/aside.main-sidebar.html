@@ -1,0 +1,46 @@
+<!-- sidebar: style can be found in sidebar.less -->
+<section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel" ng-if="globals.currentUser">
+        <div class="pull-left image">
+            <img ng-src="./img/profiles/{{globals.currentDATA.PIC_}}" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+            <p>{{globals.currentDATA.FULLNAME}}</p>
+            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+    </div>    
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu" ng-controller="menu_navbar" ng-cloak>
+        <li class="header">MAIN NAVIGATION</li>
+        <li ng-repeat="m in menu" ng-if="m.name" ng-show="!m.menu_hide" ui-sref-active="active">
+            <a ui-sref="{{m.name}}">
+                <img ng-src="{{m.ICO_CLASS}}" class="icon-sm" alt="{{m.TH_name}}"> <span>{{m.TH_name}}</span>
+            </a>
+        </li>
+        <li ng-repeat="m in menu" ng-if="!m.name" class="treeview ">
+            <a class="link">
+                <img ng-src="{{m.ICO_CLASS}}" class="icon-sm" alt="{{m.TH_name}}"> <span>{{m.TH_name}}</span> <i class="fa fa-chevron-down"></i></a>
+            <ul class="treeview-menu">
+                <li ng-repeat="mm in m.dropdown" ng-if="mm.name" ng-show="!mm.menu_hide" ui-sref-active="active">
+                    <a ui-sref="{{mm.name}}">{{mm.TH_name}}</a>
+                </li>
+                <li ng-repeat="mm in m.dropdown" ng-if="!mm.name" class="treeview ">
+                    <a><span>{{mm.TH_name}}</span> <i class="fa fa-chevron-down"></i></a>
+                    <ul class="treeview-menu">
+                        <li ng-repeat="mmm in mm.dropdown" ng-show="!mmm.menu_hide" ui-sref-active="current-page active">
+                            <a ui-sref="{{mmm.name}}" class="link">{{mmm.TH_name}}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li> 
+        <!--       
+        <li class="header">LABELS</li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+        -->
+    </ul>
+</section>
+<!-- /.sidebar -->

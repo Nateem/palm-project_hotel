@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-init="appName={'TH':'Hotel Easy','EN':'Hotel Easy'}">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title ng-bind="appName.EN + ' | ' + globals.stateName">Hotel Easy</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- icon -->
+    <link rel="apple-touch-icon" sizes="57x57" href="img/ico/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="img/ico/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/ico/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/ico/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/ico/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/ico/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="img/ico/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/ico/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/ico/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/ico/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/ico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="img/ico/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/ico/favicon-16x16.png">
+    <link rel="manifest" href="img/ico/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="img/ico/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Bootstrap daterangpicker-->
+    <link rel="stylesheet" href="plugins/bootstrap-daterangepicker/daterangepicker.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./plugins/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">-->
+    <!-- PNotify -->
+    <link href="./plugins/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="./plugins/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="./plugins/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="./plugins/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="./plugins/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="./plugins/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="./plugins/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="./plugins/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <!-- app -->
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/font-face.css">
+</head>
+
+<body class="hold-transition skin-black layout-top-nav">
+    <div class="wrapper">
+        <header class="main-header" ng-include="'./include/header.main-header.html'"></header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <!-- <aside class="main-sidebar" ng-include="'./include/aside.main-sidebar.html'"></aside> -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header" ng-include="'./include/section.content-header.html'" ng-controller="contentHeaderController" ng-if="globals.stateName"></section>
+            <!-- Main content -->
+            <span us-spinner="{radius:30, width:8, length: 16 ,color: '#009688', shadow: false , hwaccel: true}"></span>
+            <section class="content" ui-view>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer" ng-include="'./include/footer.main-footer.html'"></footer>
+        <!-- Control Sidebar -->
+        <!--<aside class="control-sidebar control-sidebar-dark" ng-include="'./include/aside.control-sidebar.html'"></aside>-->
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery 2.2.3 -->
+    <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- Datatables -->
+    <script src="./plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="./plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="./plugins/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="./plugins/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="./plugins/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="./plugins/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="./plugins/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="./plugins/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="./plugins/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="./plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="./plugins/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <!-- moment -->
+    <!--<script src="./plugins/moment/moment.js"></script>-->
+    <script src="./plugins/moment/moment-with-locales.js"></script>
+    <script src="./plugins/moment/moment-timezone.js"></script>
+    <script src="./plugins/moment/moment-range.min.js"></script>
+    <!-- PNotify -->
+    <script src="./plugins/pnotify/dist/pnotify.js"></script>
+    <script src="./plugins/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="./plugins/pnotify/dist/pnotify.confirm.js"></script>
+    <script src="./plugins/pnotify/dist/pnotify.nonblock.js"></script>
+    <!-- spin -->
+    <script src="./plugins/spin.min.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="./plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- CKEditor-->
+    <script src="./plugins/ckeditor/ckeditor.js"></script>
+    <!-- Chart-->
+    <script src="./plugins/Chart.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/app.min.js"></script>
+    <!-- angular js -->
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-ui-router.min.js"></script>
+    <script src="js/angular-pnotify.js"></script>
+    <script src="js/angular-chart.min.js"></script>
+    <script src="js/angular-cookies.min.js"></script>
+    <script src="js/angular-pnotify.js"></script>
+    <script src="js/angular-ckeditor.js"></script>
+    <script src="js/angular-spinner.min.js"></script>
+    <script src="js/angular-loading-spinner.js"></script>
+    <script src="js/angular-daterangepicker.js"></script>
+    <script src="js/angular-moment.min.js"></script>
+    <script src="js/checklist-model.js"></script>
+    <script src="plugins/angular-datatables-master/dist/angular-datatables.min.js"></script>
+    <script src="plugins/angular-datatables-master/dist/plugins/buttons/angular-datatables.buttons.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/controllers/indexController.js"></script>
+    <script src="js/controllers/contentHeaderController.js"></script>
+    <script src="js/controllers/homeController.js"></script>
+    <script src="js/controllers/loginController.js"></script>
+    <script src="js/controllers/bookingController.js"></script>
+    <script src="js/controllers/booking_addController.js"></script>
+    <script src="js/controllers/not_availableController.js"></script>
+    <script src="js/controllers/not_available_addController.js"></script>
+    <script src="js/controllers/checkinController.js"></script>
+    <script src="js/controllers/checkin_addController.js"></script>
+    <script src="js/controllers/checkoutController.js"></script>
+    <script src="js/controllers/checkout_addController.js"></script>
+    <script src="js/controllers/summaryController.js"></script>
+    <script src="js/controllers/summary_totalController.js"></script>
+
+    <script src="js/controllers/manageController.js"></script>
+    <script src="js/controllers/manage_room_typeController.js"></script>
+    <script src="js/controllers/manage_room_dataController.js"></script>
+    <script src="js/controllers/manage_customerController.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,184 @@
+<style>
+.info-box:hover {
+    cursor: pointer;
+    box-shadow: 1px 5px 10px #333;
+    border: -2px solid #ddd;
+}
+
+.panel:hover {
+    border: 1px solid #9E9E9E;
+}
+
+.linkClick:hover {
+    cursor: pointer;
+    text-shadow: 1px 2px 2px #333;
+}
+</style>
+<div ng-controller="checkout_addController">
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-default" onClick="history.back()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
+                </button>
+            </div>
+            <h3 class="box-title">
+                <span ng-repeat="sR in statusRepeat" style="font-size: 9px;">   
+                    <i class="fa fa-square fa-2x" style="color: {{sR.COLOR_CODE}};"></i> {{sR.STATUS}}
+                </span>
+            </h3>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <form name="formDateRang" ng-submit="onChangeDateRang()" class="top_scroll">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="callout callout-default" role="alert" date-range-picker ng-model="form.DATERANG.startDate" options="rangOptions" style="cursor: pointer;">
+                            <p class="text-center">
+                                <i class="fa fa-calendar"></i> {{form.DATERANG.startDate | amDateFormat:'ddd , DD/MM/YYYY'}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <fieldset>
+                            <label>
+                                <input type="radio" name="FILTER_SHOW" id="FILTER_SHOW1" ng-model="filterShow" value="" checked> แสดงทั้งหมด
+                            </label>
+                            <br>
+                            <label>
+                                <input type="radio" name="FILTER_SHOW" id="FILTER_SHOW2" ng-model="filterShow" value="2"> แสดงเฉพาะห้องมีผู้เข้าพัก
+                            </label>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+            <div class="containner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="well">
+                            <div class="row" ng-repeat="rm_type in DataRoomRepeat" ng-if="rm_type[0].CODE">
+                                <!-- /.col -->
+                                <fieldset>
+                                    <legend>{{DataRoomHeadRepeat[$index].NAME_TYPE}} Price : {{DataRoomHeadRepeat[$index].PRICE | currency:"THB "}}
+                                        <small>รายละเอียด : ขนาดเตียง {{DataRoomHeadRepeat[$index].BED_SIZE}} รองรับ {{DataRoomHeadRepeat[$index].SUPPORT}} ท่าน</small></legend>
+                                    
+                                    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6" ng-repeat="rm in rm_type | filter:{ROOM_STATUS_CODE:filterShow}" ng-click="INSERT_TEMP(rm.CODE,rm.ROOM_STATUS_CODE)" style="padding: 4px;">
+                                        <div class="room_item" ng-class="{'1':'bg-green','2':'bg-blue','3':'bg-orange','4':'bg-red'}[rm.ROOM_STATUS_CODE]" style="max-height:30px; padding: 5px;">
+                                            <p><code style="font-size: 10px;">{{rm.CODE}}</code></p>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+    <!-- Modal -->
+    <div class="modal" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="infoModalLabel">{{InfoRoomRepeat.room_data_CODE}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="printDiv">
+                        <blockquote>
+                            <p>ลูกค้า : {{InfoRoomRepeat.FNAME}} {{InfoRoomRepeat.LNAME}}</p>
+                            <p>วันเข้าพัก : {{InfoRoomRepeat.E_START | amDateFormat:'ddd , DD/MM/YYYY'}}
+                                <kbd>ถึง</kbd> {{InfoRoomRepeat.E_END | amDateFormat:'ddd , DD/MM/YYYY'}}</p>
+                            <p>จำนวน : {{InfoRoomRepeat.E_BETWEEN}} วัน</p>
+                            <p>เลขที่ใบเสร็จ : {{InfoRoomRepeat.BILLCODE}} <span style="float: right;">วันที่ {{InfoRoomRepeat.CREATED | amDateFormat:'DD/MM/YYYY'}}</span></p>
+                            <p>หมายเหตุ : {{InfoRoomRepeat.NOTE}}</p>
+                        </blockquote>
+                        <hr>
+                        <table width="100%" class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ลำดับ</th>
+                                    <th>ห้อง</th>
+                                    <th>เช็คอิน</th>
+                                    <th>ราคา</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ifd in InfoDetailRoomRepeat">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{ifd.room_data_CODE}}</td>
+                                    <td>{{ifd.CHK_IN_DATETIME | amDateFormat:'ddd , DD/MM/YYYY HH:mm:ss น.'}}</td>
+                                    <td align="right" class="text-right">{{ifd.PRICE | currency: 'THB '}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td style="border-top: 1px outset #666;" colspan="3" align="right" class="text-right">ค่าเตียงเสริม</td>
+                                    <td style="border-top: 1px outset #666;" align="right" class="text-right">{{PRICE_BEDPLUS | currency: 'THB '}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" align="right" class="text-right">ส่วนลด :</td>
+                                    <td align="right" class="text-right">{{DISCOUNT | currency: 'THB '}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" align="right" class="text-right">รวม :</td>
+                                    <td align="right" class="text-right">{{PRICE_TOTAL | currency: 'THB '}}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="3" align="right" class="text-right">เงินมัดจำ :</th>
+                                    <th align="right" class="text-right">{{DEPOSIT | currency: 'THB '}}</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="3" align="right" class="text-right">อื่นๆ(ค่าอาหาร/เครื่องดื่ม)รวม :</th>
+                                    <th align="right" class="text-right">{{OTHER_PRICE | currency: 'THB '}}</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="3" align="right" class="text-right"><u>รวมเป็นเงินทั้งสิ้น :</u></th>
+                                    <th align="right" class="text-right"><u>{{SUMTOTAL | currency: 'THB '}}</u></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="3" align="right" class="text-right">จ่ายแล้ว :</th>
+                                    <th align="right" class="text-right">{{PAY_TOTAL | currency: 'THB '}}</th>
+                                </tr>
+                                <tr ng-if="CASH_CHANGE>0">
+                                    <th colspan="3" align="right" class="text-right">เงินทอน :</th>
+                                    <th align="right" class="text-right">{{CASH_CHANGE | currency: 'THB '}}</th>
+                                </tr>
+                                <tr ng-if="OWE>=0">
+                                    <th colspan="3" align="right" class="text-right">ค้างชำระ :</th>
+                                    <th align="right" class="text-right">{{OWE | currency: 'THB '}}</th>
+                                </tr>
+                                
+                            </tfoot>
+                        </table>
+                        <i ng-show="false" style="position: fixed;bottom: 5px;right: 5px;font-size: 16px;">โดย {{globals.currentDATA.FULLNAME}} เมื่อ {{CURDATE | amDateFormat:'DD/MM/YYYY HH:mm:ss'}}</i>
+                    </div>
+                    <div id="cotrol">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-6">
+                                <label for="">ค่าอาหาร/เครื่องดื่ม :</label>
+                                <input type="number" step="any" min="0" ng-model="OTHER_PRICE" onclick="this.select()" ng-change="ngChangeNumber()" class="form-control">
+                            </div>
+                            <div class="col-sm-4 col-xs-6">
+                                <label for="">จ่ายเพิ่ม :</label>
+                                <input type="number" step="any" min="0" ng-model="PAY_PLUS" onclick="this.select()" ng-change="ngChangeNumber()" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" ng-click="PRINT_BILL('printDiv');">
+                        <i class="fa fa-print"></i> Print</button>
+                    <button type="button" class="btn btn-success" ng-click="PrintElem('printDiv',true)">
+                        <i class="fa fa-print"></i> ใบเสร็จกำกับภาษี</button>
+                    <button type="button" class="btn btn-primary" ng-click="checkOutAfterCheckIn(InfoRoomRepeat.BILLCODE)">Check-Out</button>
+                    <!--<div class="pull-left" ng-include="'./include/info.calculator.html'"></div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

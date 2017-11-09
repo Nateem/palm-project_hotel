@@ -1,0 +1,37 @@
+
+
+    <nav class="navbar navbar-static-top" ng-controller="homeController">
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu" ng-if="globals.currentUser">
+                <a class="dropdown-toggle link" data-toggle="dropdown">
+                    <img  ng-src="./img/profiles/{{globals.currentDATA.PIC_}}" class="user-image" alt="User Image">
+                    <span class="hidden-xs">{{ENdateConvert | date:'EEE d MMM, y h:mm:ss a'}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- User image -->
+                    <li class="user-header">
+                        <img ng-src="./img/profiles/{{globals.currentDATA.PIC_}}" class="img-circle" alt="User Image">
+                        <p>
+                            {{globals.currentDATA.FULLNAME}} 
+                            <small>{{globals.currentDATA.OFFICE}}</small>
+                        </p>
+                    </li>                    
+                    <!-- Menu Footer-->
+                    <li class="user-footer">                        
+                        <div class="pull-right">
+                            <a ui-sref="login" class="btn btn-default btn-flat">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>        
+          </ul>
+        </div>
+        <!-- /.navbar-custom-menu -->
+      </div>
+      <!-- /.container-fluid -->
+    </nav>
